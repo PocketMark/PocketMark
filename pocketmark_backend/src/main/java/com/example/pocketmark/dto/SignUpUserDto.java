@@ -61,4 +61,23 @@ public class SignUpUserDto {
         private boolean isDuplicated;
         private String jwt;
     }
+
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class SignUpEmailCheckReq{
+        private String email;
+    }
+    
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class SignUpNickNameCheckReq{
+        private String nickName;
+        
+    }
+
 }
