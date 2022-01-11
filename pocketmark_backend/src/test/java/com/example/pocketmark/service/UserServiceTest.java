@@ -131,245 +131,245 @@ class UserServiceTest {
 
     }
 
-    @DisplayName("Token(Email)정보를 받아 유저정보를 조회한다.")
-    @Test
-    public void givenHttpSession_whenSelectUser_thenReturnUser(){
-        //Given
-        String email = "test@gmail.com";
-        given(userRepository.findByEmail(any()))
-                .willReturn(
-                        Optional.of(User.builder()
-                                .email("test@gmail.com")
-                                .pw("12341234")
-                                .nickName("JyuKa")
-                                .build()
-                        )
-                );
+//     @DisplayName("Token(Email)정보를 받아 유저정보를 조회한다.")
+//     @Test
+//     public void givenHttpSession_whenSelectUser_thenReturnUser(){
+//         //Given
+//         String email = "test@gmail.com";
+//         given(userRepository.findByEmail(any()))
+//                 .willReturn(
+//                         Optional.of(User.builder()
+//                                 .email("test@gmail.com")
+//                                 .pw("12341234")
+//                                 .nickName("JyuKa")
+//                                 .build()
+//                         )
+//                 );
 
-        //When
-        User user = userService.selectUserByToken(email);
+//         //When
+//         User user = userService.selectUserByToken(email);
 
-        //Then
-        then(user.getEmail()).isEqualTo("test@gmail.com");
-        then(user.getNickName()).isEqualTo("JyuKa");
-        then(user.getPw()).isEqualTo("12341234");
-        verify(userRepository).findByEmail(any());
-    }
+//         //Then
+//         then(user.getEmail()).isEqualTo("test@gmail.com");
+//         then(user.getNickName()).isEqualTo("JyuKa");
+//         then(user.getPw()).isEqualTo("12341234");
+//         verify(userRepository).findByEmail(any());
+//     }
 
-    @DisplayName("존재하지 않는 Token(Email)를 받아 Exception 을 발생시킨다.")
-    @Test
-    public void givenNullHttpSession_whenSelectUser_thenReturnUnAuthorizeException(){
-        //Given
-        String email = "test1@gmail.com";
-        given(userRepository.findByEmail(any()))
-                .willReturn(Optional.empty());
+//     @DisplayName("존재하지 않는 Token(Email)를 받아 Exception 을 발생시킨다.")
+//     @Test
+//     public void givenNullHttpSession_whenSelectUser_thenReturnUnAuthorizeException(){
+//         //Given
+//         String email = "test1@gmail.com";
+//         given(userRepository.findByEmail(any()))
+//                 .willReturn(Optional.empty());
 
-        //When
-        Throwable thrown = catchThrowable(()->userService.selectUserByToken(email));
+//         //When
+//         Throwable thrown = catchThrowable(()->userService.selectUserByToken(email));
 
-        //Then
-        then(thrown)
-                .isInstanceOf(GeneralException.class)
-                .hasMessageContaining(ErrorCode.ENTITY_NOT_EXIST.getMessage());
-    }
-
-
-    @DisplayName("정상적인 비밀번호 변경")
-    @Test
-    public void givenChangePwDto_whenChangePw_thenReturnChangePw(){
-        //Given
-        ModifyPwDto.ChangePwDto changePwDto = ModifyPwDto.ChangePwDto.builder()
-                .nowPw("1234").newPw("4321").confPw("4321")
-                .build();
-        String email = "test1@gmail.com";
+//         //Then
+//         then(thrown)
+//                 .isInstanceOf(GeneralException.class)
+//                 .hasMessageContaining(ErrorCode.ENTITY_NOT_EXIST.getMessage());
+//     }
 
 
-        Optional<User> user = Optional.of(User.builder()
-                        .email("test@gmail.com")
-                        .pw("12341234")
-                        .nickName("JyuKa")
-                        .build());
-        given(userRepository.findByEmail(any()))
-                .willReturn(user);
-
-        String hashNewPw = BCrypt.hashpw(changePwDto.getNewPw(),BCrypt.gensalt());
-        given(encryptor.encrypt(changePwDto.getNewPw()))
-                .willReturn(hashNewPw);
-        given(encryptor.isMatch(any(),any()))
-                .willReturn(true);
-
-        //When
-        userService.modifyPassword(changePwDto,email);
-
-        //Then
-        then(user.get().getPw().equals(changePwDto.getNowPw())).isFalse();
-        verify(userRepository).findByEmail(any());
-        verify(encryptor).encrypt(changePwDto.getNewPw());
-        verify(encryptor).isMatch(any(),any());
-    }
-
-    @DisplayName("현재 비밀번호가 불일치 할때 PASSWORD_NOT_MATCH 응답")
-    @Test
-    public void givenNotMatchPw_whenChangePw_thenReturnPasswordNotMatch(){
-        //Given
-        ModifyPwDto.ChangePwDto changePwDto = ModifyPwDto.ChangePwDto.builder()
-                .nowPw("1234").newPw("4321").confPw("4321")
-                .build();
-        String email = "test1@gmail.com";
+//     @DisplayName("정상적인 비밀번호 변경")
+//     @Test
+//     public void givenChangePwDto_whenChangePw_thenReturnChangePw(){
+//         //Given
+//         ModifyPwDto.ChangePwDto changePwDto = ModifyPwDto.ChangePwDto.builder()
+//                 .nowPw("1234").newPw("4321").confPw("4321")
+//                 .build();
+//         String email = "test1@gmail.com";
 
 
-        given(encryptor.isMatch(any(),any()))
-                .willReturn(false);
+//         Optional<User> user = Optional.of(User.builder()
+//                         .email("test@gmail.com")
+//                         .pw("12341234")
+//                         .nickName("JyuKa")
+//                         .build());
+//         given(userRepository.findByEmail(any()))
+//                 .willReturn(user);
 
-        Optional<User> user = Optional.of(User.builder()
-                .email("test@gmail.com")
-                .pw("12341234")
-                .nickName("JyuKa")
-                .build());
-        given(userRepository.findByEmail(any()))
-                .willReturn(user);
+//         String hashNewPw = BCrypt.hashpw(changePwDto.getNewPw(),BCrypt.gensalt());
+//         given(encryptor.encrypt(changePwDto.getNewPw()))
+//                 .willReturn(hashNewPw);
+//         given(encryptor.isMatch(any(),any()))
+//                 .willReturn(true);
 
-        //When
-        Throwable thrown = catchThrowable(()->userService.modifyPassword(changePwDto,email));
+//         //When
+//         userService.modifyPassword(changePwDto,email);
 
-        //Then
-        then(thrown)
-                .isInstanceOf(GeneralException.class)
-                .hasMessageContaining(ErrorCode.PASSWORD_NOT_MATCH.getMessage());
-        verify(encryptor).isMatch(any(),any());
-        verify(userRepository).findByEmail(any());
-    }
+//         //Then
+//         then(user.get().getPw().equals(changePwDto.getNowPw())).isFalse();
+//         verify(userRepository).findByEmail(any());
+//         verify(encryptor).encrypt(changePwDto.getNewPw());
+//         verify(encryptor).isMatch(any(),any());
+//     }
 
-    @DisplayName("새 비밀번호, 새 비밀먼호 확인이 불일치 할 때")
-    @Test
-    public void givenDifferentPws_whenChangePw_thenReturnDifferentNewPw(){
-        //Given
-        ModifyPwDto.ChangePwDto changePwDto = ModifyPwDto.ChangePwDto.builder()
-                .nowPw("1234").newPw("4321").confPw("431")
-                .build();
-        String email = "test1@gmail.com";
-
-
-        Optional<User> user = Optional.of(User.builder()
-                .email("test@gmail.com")
-                .pw("1234")
-                .nickName("JyuKa")
-                .build());
-        given(userRepository.findByEmail(any()))
-                .willReturn(user);
-
-        given(encryptor.isMatch(any(),any()))
-                .willReturn(true);
-
-        //When
-        Throwable thrown = catchThrowable(()->userService.modifyPassword(changePwDto,email));
-
-        //Then
-        then(thrown)
-                .isInstanceOf(GeneralException.class)
-                .hasMessageContaining(ErrorCode.DIFFERENT_NEW_PW.getMessage());
-        verify(encryptor).isMatch(any(),any());
-        verify(userRepository).findByEmail(any());
-    }
-
-    @DisplayName("정상적인 닉네임 변경")
-    @Test
-    public void givenChangeNickNameDto_whenChangeNickName_thenReturnChangeNickName(){
-        //Given
-        ModifyNickNameDto.ChangeNickNameDto changeNickNameDto =
-                ModifyNickNameDto.ChangeNickNameDto.builder()
-                        .newNickName("JyuKa1")
-                        .build();
-
-        String email = "test@gmail.com";
-
-        Optional<User> user = Optional.of(User.builder()
-                .email("test@gmail.com")
-                .pw("12341234")
-                .nickName("JyuKa")
-                .build());
-
-        given(userRepository.findByEmail(any()))
-                .willReturn(user);
-
-        given(userRepository.existsByNickName(anyString()))
-                .willReturn(false);
+//     @DisplayName("현재 비밀번호가 불일치 할때 PASSWORD_NOT_MATCH 응답")
+//     @Test
+//     public void givenNotMatchPw_whenChangePw_thenReturnPasswordNotMatch(){
+//         //Given
+//         ModifyPwDto.ChangePwDto changePwDto = ModifyPwDto.ChangePwDto.builder()
+//                 .nowPw("1234").newPw("4321").confPw("4321")
+//                 .build();
+//         String email = "test1@gmail.com";
 
 
-        //When
-        userService.modifyNickName(changeNickNameDto,email);
+//         given(encryptor.isMatch(any(),any()))
+//                 .willReturn(false);
 
-        //Then
-        then(user.get().getNickName()).isEqualTo(changeNickNameDto.getNewNickName());
-        verify(userRepository).findByEmail(any());
-        verify(userRepository).existsByNickName(anyString());
-    }
+//         Optional<User> user = Optional.of(User.builder()
+//                 .email("test@gmail.com")
+//                 .pw("12341234")
+//                 .nickName("JyuKa")
+//                 .build());
+//         given(userRepository.findByEmail(any()))
+//                 .willReturn(user);
 
-    @DisplayName("중복된 닉네임으로 변경을 시도할 떄 예외를 출력한다")
-    @Test
-    public void givenExistNickName_whenChangeNickName_thenReturnNickNameExistException(){
-        //Given
-        ModifyNickNameDto.ChangeNickNameDto changeNickNameDto =
-                ModifyNickNameDto.ChangeNickNameDto.builder()
-                        .newNickName("JyuKa1")
-                        .build();
+//         //When
+//         Throwable thrown = catchThrowable(()->userService.modifyPassword(changePwDto,email));
 
-        String email = "test1@gmail.com";
+//         //Then
+//         then(thrown)
+//                 .isInstanceOf(GeneralException.class)
+//                 .hasMessageContaining(ErrorCode.PASSWORD_NOT_MATCH.getMessage());
+//         verify(encryptor).isMatch(any(),any());
+//         verify(userRepository).findByEmail(any());
+//     }
 
-        Optional<User> user = Optional.of(User.builder()
-                .email("test@gmail.com")
-                .pw("12341234")
-                .nickName("JyuKa")
-                .build());
-
-        given(userRepository.findByEmail(any()))
-                .willReturn(user);
-
-        given(userRepository.existsByNickName(anyString()))
-                .willReturn(true);
-
+//     @DisplayName("새 비밀번호, 새 비밀먼호 확인이 불일치 할 때")
+//     @Test
+//     public void givenDifferentPws_whenChangePw_thenReturnDifferentNewPw(){
+//         //Given
+//         ModifyPwDto.ChangePwDto changePwDto = ModifyPwDto.ChangePwDto.builder()
+//                 .nowPw("1234").newPw("4321").confPw("431")
+//                 .build();
+//         String email = "test1@gmail.com";
 
 
+//         Optional<User> user = Optional.of(User.builder()
+//                 .email("test@gmail.com")
+//                 .pw("1234")
+//                 .nickName("JyuKa")
+//                 .build());
+//         given(userRepository.findByEmail(any()))
+//                 .willReturn(user);
 
-        //When
-        Throwable thrown = catchThrowable(()->userService.modifyNickName(changeNickNameDto,email));
+//         given(encryptor.isMatch(any(),any()))
+//                 .willReturn(true);
 
-        //Then
-        then(thrown)
-                .isInstanceOf(GeneralException.class)
-                .hasMessageContaining(ErrorCode.NICKNAME_EXIST.getMessage());
-        verify(userRepository).findByEmail(any());
-        verify(userRepository).existsByNickName(anyString());
-    }
+//         //When
+//         Throwable thrown = catchThrowable(()->userService.modifyPassword(changePwDto,email));
 
-    @DisplayName("정상적인 닉네임 변경")
-    @Test
-    public void givenLeaveUserDto_whenDeleteUser_thenReturnDeleteUser(){
-        //Given
-        LeaveUser.LeaveUserDto dto = LeaveUser.LeaveUserDto.builder()
-                .leave(true)
-                .build();
+//         //Then
+//         then(thrown)
+//                 .isInstanceOf(GeneralException.class)
+//                 .hasMessageContaining(ErrorCode.DIFFERENT_NEW_PW.getMessage());
+//         verify(encryptor).isMatch(any(),any());
+//         verify(userRepository).findByEmail(any());
+//     }
 
-        String email = "test1@gmail.com";
+//     @DisplayName("정상적인 닉네임 변경")
+//     @Test
+//     public void givenChangeNickNameDto_whenChangeNickName_thenReturnChangeNickName(){
+//         //Given
+//         ModifyNickNameDto.ChangeNickNameDto changeNickNameDto =
+//                 ModifyNickNameDto.ChangeNickNameDto.builder()
+//                         .newNickName("JyuKa1")
+//                         .build();
 
-        Optional<User> user = Optional.of(User.builder()
-                .email("test@gmail.com")
-                .pw("12341234")
-                .nickName("JyuKa")
-                .build());
+//         String email = "test@gmail.com";
 
-        given(userRepository.findByEmail(any()))
-                .willReturn(user);
+//         Optional<User> user = Optional.of(User.builder()
+//                 .email("test@gmail.com")
+//                 .pw("12341234")
+//                 .nickName("JyuKa")
+//                 .build());
+
+//         given(userRepository.findByEmail(any()))
+//                 .willReturn(user);
+
+//         given(userRepository.existsByNickName(anyString()))
+//                 .willReturn(false);
+
+
+//         //When
+//         userService.modifyNickName(changeNickNameDto,email);
+
+//         //Then
+//         then(user.get().getNickName()).isEqualTo(changeNickNameDto.getNewNickName());
+//         verify(userRepository).findByEmail(any());
+//         verify(userRepository).existsByNickName(anyString());
+//     }
+
+//     @DisplayName("중복된 닉네임으로 변경을 시도할 떄 예외를 출력한다")
+//     @Test
+//     public void givenExistNickName_whenChangeNickName_thenReturnNickNameExistException(){
+//         //Given
+//         ModifyNickNameDto.ChangeNickNameDto changeNickNameDto =
+//                 ModifyNickNameDto.ChangeNickNameDto.builder()
+//                         .newNickName("JyuKa1")
+//                         .build();
+
+//         String email = "test1@gmail.com";
+
+//         Optional<User> user = Optional.of(User.builder()
+//                 .email("test@gmail.com")
+//                 .pw("12341234")
+//                 .nickName("JyuKa")
+//                 .build());
+
+//         given(userRepository.findByEmail(any()))
+//                 .willReturn(user);
+
+//         given(userRepository.existsByNickName(anyString()))
+//                 .willReturn(true);
 
 
 
-        //When
-        userService.deleteUser(dto,email);
 
-        //Then
-        then(user.get().isDeleted()).isEqualTo(dto.isLeave());
-        verify(userRepository).findByEmail(any());
-    }
+//         //When
+//         Throwable thrown = catchThrowable(()->userService.modifyNickName(changeNickNameDto,email));
+
+//         //Then
+//         then(thrown)
+//                 .isInstanceOf(GeneralException.class)
+//                 .hasMessageContaining(ErrorCode.NICKNAME_EXIST.getMessage());
+//         verify(userRepository).findByEmail(any());
+//         verify(userRepository).existsByNickName(anyString());
+//     }
+
+//     @DisplayName("정상적인 닉네임 변경")
+//     @Test
+//     public void givenLeaveUserDto_whenDeleteUser_thenReturnDeleteUser(){
+//         //Given
+//         LeaveUser.LeaveUserDto dto = LeaveUser.LeaveUserDto.builder()
+//                 .leave(true)
+//                 .build();
+
+//         String email = "test1@gmail.com";
+
+//         Optional<User> user = Optional.of(User.builder()
+//                 .email("test@gmail.com")
+//                 .pw("12341234")
+//                 .nickName("JyuKa")
+//                 .build());
+
+//         given(userRepository.findByEmail(any()))
+//                 .willReturn(user);
+
+
+
+//         //When
+//         userService.deleteUser(dto,email);
+
+//         //Then
+//         then(user.get().isDeleted()).isEqualTo(dto.isLeave());
+//         verify(userRepository).findByEmail(any());
+//     }
 
     @DisplayName("[Success] Security Filter : loadUserByUsername")
     @Test
