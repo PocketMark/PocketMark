@@ -42,12 +42,7 @@ public class ApiDataResponse<T> extends ApiErrorResponse {
         private boolean success;
     }
     
-    @Getter
-    @AllArgsConstructor
-    public static class JwtTempResponse{
-        private boolean success;
-        private String accessToken;
-    }
+    
 
 
 }

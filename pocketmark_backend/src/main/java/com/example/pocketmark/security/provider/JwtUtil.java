@@ -33,7 +33,7 @@ public class JwtUtil {
     private static final long REFRESH_TIME = 60*60*24*7;
 
 
-    public String generateAccessToken(User user) {
+    public static String generateAccessToken(User user) {
         Instant expiryDate = Instant.now().plusMillis(ACCESS_TOKEN_EXPIRATION_TIME);
         String authorities = getUserAuthorities(user);
         return Jwts.builder()
@@ -48,7 +48,7 @@ public class JwtUtil {
 
     }
 
-    private String getUserAuthorities(User user) {
+    private static String getUserAuthorities(User user) {
         return user
                 .getAuthorities()
                 .stream()
@@ -56,7 +56,7 @@ public class JwtUtil {
                 .collect(Collectors.joining(","));
     }
 
-    public String generateRefreshToken(User user, String jti) {
+    public static String generateRefreshToken(User user, String jti) {
         Instant expiryDate = Instant.now().plusMillis(REFRESH_TOKEN_EXPIRATION_TIME);
         return Jwts.builder()
                 .setSubject(user.getId().toString())

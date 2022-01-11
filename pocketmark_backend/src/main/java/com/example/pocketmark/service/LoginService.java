@@ -41,4 +41,20 @@ public class LoginService {
         return user;
     }
 
+
+    @Transactional
+    public TokenBox login(LoginReq req){
+        User user = userService.selectUserByLoginReq(req);
+
+        if(encryptor.isMatch(req.getPw(),user.getPw())){
+            return TokenBox.builder()
+                        // .accessToken(accessToken)
+                    .accessToken(JwtUtil.generateAccessToken(user))
+                    .refreshToken(JwtUtil.generateRefreshToken(user,user.getId().toString()))
+                    .build();
+        }
+
+        throw new GeneralException(ErrorCode.EMAIL_OR_PASSWORD_NOT_MATCH);
+    }
+
 }

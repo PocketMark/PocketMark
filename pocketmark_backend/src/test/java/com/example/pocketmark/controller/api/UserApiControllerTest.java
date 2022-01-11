@@ -59,11 +59,11 @@ class UserApiControllerTest {
         this.mapper = mapper;
     }
 
-    String email = "test@gmail.com";
+//     String email = "test@gmail.com";
 
-    public String getToken(User user){
-        return JwtUtil.makeRefreshToken(user);
-    }
+//     public String getToken(User user){
+//         return JwtUtil.makeRefreshToken(user);
+//     }
 
 
     @DisplayName("[API][POST] 일반 유저 가입 - 정상 입력하면 회원정보를 추가")
