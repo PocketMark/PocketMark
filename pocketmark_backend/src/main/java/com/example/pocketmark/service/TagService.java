@@ -2,6 +2,7 @@ package com.example.pocketmark.service;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -136,6 +137,15 @@ public class TagService {
         // return tagRepository.findByFK(itemPK);
         return tagRepository.findByItemPk(itemPK);
     }
+    
+    ///Read By SuperEntity - test
+    @Transactional(readOnly = true)
+    public List<TagResWithItemId> getTagsByItemPKIn(Collection<String> itemPKList){
+        // return tagRepository.findByFK(itemPK);
+        return tagRepository.findByItemPkIn(itemPKList);
+    }
+    
+
 
     //Delete
     //1*update

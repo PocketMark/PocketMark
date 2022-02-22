@@ -100,7 +100,4 @@ public class DataApiController {
         return ApiDataResponse.of(dataService.getAllFolders(getUserId()));
     }
 
-    
-    
-    
 }

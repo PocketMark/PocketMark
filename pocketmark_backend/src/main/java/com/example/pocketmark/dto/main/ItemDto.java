@@ -12,6 +12,8 @@ import com.example.pocketmark.domain.main.Folder;
 import com.example.pocketmark.domain.main.Tag;
 import com.example.pocketmark.domain.main.embeddable.Tags;
 import com.example.pocketmark.dto.main.TagDto.TagRes;
+import com.example.pocketmark.dto.main.TagDto.TagResImpl;
+import com.example.pocketmark.repository.TagRepository;
 import com.example.pocketmark.service.TagService;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
