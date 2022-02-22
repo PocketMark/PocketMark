@@ -134,19 +134,22 @@ public class FolderService {
 
     //Read-ALL Batchsize Test 
     //동작하는데 Folder를 Full Select 해야하는 비용 
+    //Tag는 Full Select 할 필요 없음
     public List<FolderResWithTag> getAllFoldersWithBatchSize(Long userId){
         List<Folder> folderList = folderRepository.findFoldersByUserId(userId);
-        for(Folder folder : folderList){
-            System.out.println(folder.getTags());
-        }
+        // for(Folder folder : folderList){
+        //     System.out.println(folder.getTags());
+        // }
+        System.out.println(folderList.get(0).getTags());
         return null;
     }
+
+    
 
 
 
     //Read-By ParentId
     public Slice<FolderResWithTag> getFoldersByParentId(Long userId, Long folderId, Pageable pageable){
-        System.out.println(">>> here!!!!!");
         Slice<FolderRes> folderResList = folderRepository.findDistinctByUserIdAndParentId(userId, folderId, pageable);
         List<FolderResWithTag> result = new ArrayList<>();
         
