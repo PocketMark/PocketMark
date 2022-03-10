@@ -1,8 +1,45 @@
 spring:
+  config.activate.on-profile: deploy
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher
+  
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  session:
+    store-type: jdbc
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Drvier
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: PocketMarkDev@gmail.com
+    password: ${gmailPw}
+    properties:
+      mail:
+        smtp:
+          socketFactory.class: javax.net.ssl.SSLSocketFactory
+          auth: true
+          starttls:
+            enable: true
+  
+
+server:
+  port: 9090
+
+
+---
+spring:
   config.activate.on-profile: default
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
   h2:
     console:
       enabled: true
@@ -18,7 +55,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: PocketMarkDev@gmail.com
-    password: uejfbhhxcsibwqel
+    password: ${gmailPw}
     properties:
       mail:
         smtp:
@@ -34,10 +71,10 @@ logging:
       # springframework.orm.jpa: DEBUG
       # springframework.transaction: DEBUG
       # springframework.transaction.interceptor: trace
-      hibernate:
-        type:
-          descriptor:
-            sql: trace 
+      # hibernate:
+      #   type:
+      #     descriptor:
+      #       sql: trace 
 
 server:
   port: 9090

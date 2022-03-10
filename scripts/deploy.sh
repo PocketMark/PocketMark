@@ -35,4 +35,7 @@ chmod +x $JAR_NAME >> bash_out.txt 2>&1
 
 echo ">>> $JAR_NAME 을 실행합니다. " >> bash_out.txt
 
-nohup java -jar $JAR_NAME > nohup.out 2>&1 &
+nohup java -jar \
+-Dspring.config.location=classpath:/application.yml,/home/ec2-user/app/config/application-deploy.yml
+ \-Dspring-boot.run.profiles=deploy \
+$JAR_NAME > nohup.out 2>&1 &
