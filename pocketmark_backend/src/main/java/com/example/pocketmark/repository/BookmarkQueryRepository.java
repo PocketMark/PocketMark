@@ -34,6 +34,15 @@ public class BookmarkQueryRepository {
         else return false;
     }
 
+    public boolean exist(Long itemId, Long userId){
+        Bookmark fetch = queryFactory.selectFrom(qBookmark)
+                        .where(qBookmark.itemId.eq(itemId).and(qBookmark.userId.eq(userId)))
+                        .limit(1).fetchFirst();
+
+        if(fetch != null) return true;
+        else return false;
+    }
+
 
     // 완료
     // (Name, URL, Comment, ParentId, VisitCount)

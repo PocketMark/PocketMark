@@ -145,6 +145,27 @@ public class ItemDto {
     }
 
 
+    //Folder Delete
+    @Getter @Builder
+    @AllArgsConstructor @NoArgsConstructor
+    public static class FolderDeleteReq{
+        @NotNull
+        private Long itemId;
+
+        public FolderDeleteServiceReq toServiceReq(){
+            return FolderDeleteServiceReq.builder()
+                    .itemId(this.itemId)
+                    .build();
+        }
+
+        @Getter @Builder
+        @AllArgsConstructor @NoArgsConstructor
+        public static class FolderDeleteServiceReq{
+            private Long itemId;
+        }
+    }
+
+
 
 
 
@@ -247,6 +268,26 @@ public class ItemDto {
             private String comment;
             private BigDecimal visitCount;
         
+        }
+    }
+
+    //Bookmark Delete
+    @Getter @Builder
+    @AllArgsConstructor @NoArgsConstructor
+    public static class BookmarkDeleteReq{
+        @NotNull
+        private Long itemId;
+
+        public BookmarkDeleteServiceReq toServiceReq(){
+            return BookmarkDeleteServiceReq.builder()
+                    .itemId(this.itemId)
+                    .build();
+        }
+
+        @Getter @Builder
+        @AllArgsConstructor @NoArgsConstructor
+        public static class BookmarkDeleteServiceReq{
+            private Long itemId;
         }
     }
     

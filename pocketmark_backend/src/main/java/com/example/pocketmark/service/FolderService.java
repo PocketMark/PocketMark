@@ -1,6 +1,7 @@
 package com.example.pocketmark.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,6 +27,7 @@ import com.example.pocketmark.dto.main.ItemDto.FolderResWithTag;
 import com.example.pocketmark.dto.main.ItemDto.FolderUpdateReq;
 import com.example.pocketmark.dto.main.ItemDto.ItemIdOnly;
 import com.example.pocketmark.dto.main.ItemDto.FolderCreateReq.FolderCreateServiceReq;
+import com.example.pocketmark.dto.main.ItemDto.FolderDeleteReq.FolderDeleteServiceReq;
 import com.example.pocketmark.dto.main.ItemDto.FolderUpdateReq.FolderUpdateServiceReq;
 import com.example.pocketmark.dto.main.TagDto.TagRes;
 import com.example.pocketmark.dto.main.TagDto.TagResImpl;
@@ -79,6 +81,9 @@ public class FolderService {
         folderRepository.saveAll(folders);
         return true;
     }
+
+    
+
 
     //Create-Root Folder
     @Transactional
@@ -195,6 +200,7 @@ public class FolderService {
 
 
     //Update - 완료 
+    @Transactional(readOnly=true)
     public void updateFoldersInBatch(List<FolderUpdateReq> req, Long userId){
         //유효성 검사때만 Set을 쓰고, 같은 id가 반복적 수정이 일어날 수 있으니 history는 list로 관리해야함
         Set<Long> folderIdSet = req.stream().map(FolderUpdateReq::getItemId).collect(Collectors.toSet());
@@ -256,8 +262,62 @@ public class FolderService {
 
 
 
+    /* Single Folder Req Area */
+
+    @Transactional(readOnly=true)
+    public boolean createFolder(FolderCreateServiceReq req, Long userId){
+        //validation should be placed in controller
+        folderRepository.save(req.toEntity(userId));
+        return true;
+    }
+
+    @Transactional(readOnly=true)
+    public void updateFolder(FolderUpdateServiceReq req, Long userId){
+        if(folderQueryRepository.exist(req.getItemId(), userId)){
+            folderQueryRepository.update(req, userId);
+            em.flush();
+            em.clear();
+        }else{
+            throw new GeneralException(ErrorCode.NOT_FOUND);
+        }
+    }
+
+    @Transactional(readOnly=true)
+    public void deleteFolder(FolderDeleteServiceReq req, Long userId){
+        if(folderQueryRepository.exist(req.getItemId(), userId)){
+            Queue<List<Long>> queue = new LinkedList<>();
+            queue.add(Arrays.asList(req.getItemId()));
+            Set<Long> idSet = new HashSet<>();
+
+            // 모든 자식을 찾고!
+            while(!queue.isEmpty()){//depth+1 쿼리 
+                List<Long> items = queue.poll();
+                idSet.addAll(items);
+
+                List<Long> ChildIdList= itemRepository.findItemIdOnlyByParentIdInAndUserId(items, userId)
+                            .stream().map(ItemIdOnly::getItemId).collect(Collectors.toList());
+
+                if(ChildIdList.size()>0){
+                    queue.add(ChildIdList);
+                }
+            }
+
+        //  일괄업데이트 (폴더+북마크)
+        QItem qItem = QItem.item;
+        JPAUpdateClause update = new JPAUpdateClause(em, qItem);
+        update.set(qItem.deleted, true)
+                .where(qItem.itemId.in(idSet).and(qItem.userId.eq(userId)))
+                .execute();
+
+
+        em.flush();
+        em.clear();
+        }
+    }
+
+
 
     
-    
 
+    
 }

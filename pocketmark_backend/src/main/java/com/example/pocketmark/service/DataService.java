@@ -14,10 +14,17 @@ import com.example.pocketmark.dto.main.ItemDto.AllFolderResWithTag;
 import com.example.pocketmark.dto.main.ItemDto.BookmarkRes;
 import com.example.pocketmark.dto.main.ItemDto.BookmarkResWithTag;
 import com.example.pocketmark.dto.main.ItemDto.BookmarkUpdateReq;
+import com.example.pocketmark.dto.main.ItemDto.FolderDeleteReq;
 import com.example.pocketmark.dto.main.ItemDto.FolderRes;
 import com.example.pocketmark.dto.main.ItemDto.FolderResImpl;
 import com.example.pocketmark.dto.main.ItemDto.FolderResWithTag;
 import com.example.pocketmark.dto.main.ItemDto.FolderUpdateReq;
+import com.example.pocketmark.dto.main.ItemDto.BookmarkCreateReq.BookmarkCreateServiceReq;
+import com.example.pocketmark.dto.main.ItemDto.BookmarkDeleteReq.BookmarkDeleteServiceReq;
+import com.example.pocketmark.dto.main.ItemDto.BookmarkUpdateReq.BookmarkUpdateServiceReq;
+import com.example.pocketmark.dto.main.ItemDto.FolderCreateReq.FolderCreateServiceReq;
+import com.example.pocketmark.dto.main.ItemDto.FolderDeleteReq.FolderDeleteServiceReq;
+import com.example.pocketmark.dto.main.ItemDto.FolderUpdateReq.FolderUpdateServiceReq;
 import com.example.pocketmark.repository.ItemRepository;
 
 import org.springframework.data.domain.Pageable;
@@ -127,6 +134,54 @@ public class DataService {
     @Transactional(readOnly = true)
     public AllFolderResWithTag getAllFolders(Long userId){
         return AllFolderResWithTag.builder().folders(folderService.getAllFolders(userId)).build();   
+    }
+
+
+
+
+
+    /* single Folder Request */
+    // Create A Folder
+    @Transactional(readOnly = true)
+    public boolean createFolder(FolderCreateServiceReq req, Long userId){
+        folderService.createFolder(req, userId);
+
+        return true;
+    }
+
+    //Update A Folder
+    @Transactional(readOnly = true)
+    public void updateFolder(FolderUpdateServiceReq req, Long userId){
+        folderService.updateFolder(req,userId);
+    }
+
+    //Delete A Folder
+    public boolean deleteFolder(FolderDeleteServiceReq req, Long userId){
+        folderService.deleteFolder(req, userId);
+        return true;
+    }
+
+
+    /* single Bookmark Request */
+    
+    //create Bookmark
+    @Transactional(readOnly = true)
+    public boolean createBookmark(BookmarkCreateServiceReq req, Long userId){
+        bookmarkService.createBookmark(req, userId);
+
+        return true;
+    }
+
+    //Update A Folder
+    @Transactional(readOnly = true)
+    public void updateBookmark(BookmarkUpdateServiceReq req, Long userId){
+        bookmarkService.updateBookmark(req,userId);
+    }
+
+    //Delete A Folder
+    public boolean deleteBookmark(BookmarkDeleteServiceReq req, Long userId){
+        bookmarkService.deleteBookmark(req, userId);
+        return true;
     }
 
 

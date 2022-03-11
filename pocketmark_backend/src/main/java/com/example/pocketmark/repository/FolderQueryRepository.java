@@ -48,6 +48,13 @@ public class FolderQueryRepository {
         else return false;
     }
 
+    public boolean exist(Long itemId, Long userId){
+        Item fetch = queryFactory.selectFrom(qItem)
+                    .where(qItem.itemId.eq(itemId).and(qItem.userId.eq(userId))).limit(1).fetchFirst();
+        if(fetch!=null) return true;
+        else return false;
+    }
+
 
     //no snapshot and persistence needed
     //완료 

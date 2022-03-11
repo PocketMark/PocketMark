@@ -20,6 +20,8 @@ import com.example.pocketmark.dto.main.ItemDto.BookmarkCreateReq;
 import com.example.pocketmark.dto.main.ItemDto.BookmarkRes;
 import com.example.pocketmark.dto.main.ItemDto.BookmarkResWithTag;
 import com.example.pocketmark.dto.main.ItemDto.BookmarkUpdateReq;
+import com.example.pocketmark.dto.main.ItemDto.BookmarkCreateReq.BookmarkCreateServiceReq;
+import com.example.pocketmark.dto.main.ItemDto.BookmarkDeleteReq.BookmarkDeleteServiceReq;
 import com.example.pocketmark.dto.main.ItemDto.BookmarkUpdateReq.BookmarkUpdateServiceReq;
 import com.example.pocketmark.dto.main.TagDto.TagRes;
 import com.example.pocketmark.dto.main.TagDto.TagResImpl;
@@ -48,6 +50,7 @@ public class BookmarkService {
     private final BookmarkQueryRepository bookmarkQueryRepository;
     private final EntityManager em;
     private final TagService tagService;
+
 
     //Create - 완료
     @Transactional
@@ -168,6 +171,7 @@ public class BookmarkService {
     }
 
     //Delete - 완료
+    @Transactional(readOnly=true)
     public void deleteBookmarksInBatch(List<Long> itemIdList, Long userId){
         //ItemPk = itemId + userId
         System.out.println("B >>> :"+itemIdList);
@@ -216,6 +220,44 @@ public class BookmarkService {
         
     }
 
+
+
+
+    /* Single Folder Req Area */
+
+    @Transactional(readOnly=true)
+    public boolean createBookmark(BookmarkCreateServiceReq req, Long userId){
+        //validation should be placed in controller
+        bookmarkRepository.save(req.toEntity(userId));
+        return true;
+    }
+
+    @Transactional(readOnly=true)
+    public void updateBookmark(BookmarkUpdateServiceReq req, Long userId){
+        if(bookmarkQueryRepository.exist(req.getItemId(), userId)){
+            bookmarkQueryRepository.update(req, userId);
+            em.flush();
+            em.clear();
+        }else{
+            throw new GeneralException(ErrorCode.NOT_FOUND);
+        }
+    }
+
+    @Transactional(readOnly=true)
+    public void deleteBookmark(BookmarkDeleteServiceReq req, Long userId){
+        if(bookmarkQueryRepository.exist(req.getItemId(), userId)){
+            QItem qItem = QItem.item;
+            JPAUpdateClause update = new JPAUpdateClause(em, qItem);
+                update
+                    .set(qItem.deleted, true)
+                    .where(qItem.itemId.eq(req.getItemId()).and(qItem.userId.eq(userId)))
+                    .execute();
+            em.flush();
+            em.clear();
+        }else{
+            throw new GeneralException(ErrorCode.NOT_FOUND);
+        }
+    }
     
 
 }

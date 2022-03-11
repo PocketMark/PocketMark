@@ -6,6 +6,12 @@ import com.example.pocketmark.dto.main.DataDto.DataDeleteReq;
 import com.example.pocketmark.dto.main.DataDto.DataRes;
 import com.example.pocketmark.dto.main.DataDto.DataUpdateReq;
 import com.example.pocketmark.dto.main.ItemDto.AllFolderResWithTag;
+import com.example.pocketmark.dto.main.ItemDto.BookmarkCreateReq;
+import com.example.pocketmark.dto.main.ItemDto.BookmarkDeleteReq;
+import com.example.pocketmark.dto.main.ItemDto.BookmarkUpdateReq;
+import com.example.pocketmark.dto.main.ItemDto.FolderCreateReq;
+import com.example.pocketmark.dto.main.ItemDto.FolderDeleteReq;
+import com.example.pocketmark.dto.main.ItemDto.FolderUpdateReq;
 import com.example.pocketmark.security.provider.UserPrincipal;
 import com.example.pocketmark.service.DataService;
 
@@ -102,6 +108,74 @@ public class DataApiController {
 
     ) {
         return ApiDataResponse.of(dataService.getAllFolders(getUserId()));
+    }
+
+
+    /* SINGLE folder reqeust */
+
+    //create a single Folder
+    @PostMapping(value="/folder")
+    @ApiOperation(value="단일 폴더 생성")
+    public ApiDataResponse<String> createFolder(
+        @RequestBody FolderCreateReq req
+    ) {
+        dataService.createFolder(req.toServiceReq(), getUserId());
+        
+        return ApiDataResponse.of(HttpStatus.OK.value(), "폴더가 성공적으로 생성되었습니다.", null);
+    }
+
+    //update a single Folder
+    @PutMapping(value="/folder")
+    @ApiOperation(value="단일 폴더 수정")
+    public ApiDataResponse<String> updateFolder(
+        @RequestBody FolderUpdateReq req
+    ) {
+        dataService.updateFolder(req.toServiceReq(), getUserId());
+        return ApiDataResponse.of(HttpStatus.OK.value(), "폴더가 성공적으로 수정되었습니다.", null);
+    }
+
+    //delete a single Folder
+    @PutMapping(value="/folder/delete")
+    @ApiOperation(value="단일 폴더 삭제")
+    public ApiDataResponse<String> deleteFolder(
+        @RequestBody FolderDeleteReq req
+    ) {
+        dataService.deleteFolder(req.toServiceReq(), getUserId());
+        return ApiDataResponse.of(HttpStatus.OK.value(), "폴더가 성공적으로 삭제되었습니다.", null);
+    }
+
+
+    /* SINGLE bookmark reqeust */
+
+    //create a single bookmark
+    @PostMapping(value="/bookmark")
+    @ApiOperation(value="단일 폴더 생성")
+    public ApiDataResponse<String> createBookmark(
+        @RequestBody BookmarkCreateReq req
+    ) {
+        dataService.createBookmark(req.toServiceReq(), getUserId());
+        
+        return ApiDataResponse.of(HttpStatus.OK.value(), "북마크가 성공적으로 생성되었습니다.", null);
+    }
+
+    //update a single bookmark
+    @PutMapping(value="/bookmark")
+    @ApiOperation(value="단일 폴더 수정")
+    public ApiDataResponse<String> updateFolder(
+        @RequestBody BookmarkUpdateReq req
+    ) {
+        dataService.updateBookmark(req.toServiceReq(), getUserId());
+        return ApiDataResponse.of(HttpStatus.OK.value(), "북마크가 성공적으로 수정되었습니다.", null);
+    }
+    
+    //delete a single bookmark
+    @PutMapping(value="/folder/delete")
+    @ApiOperation(value="단일 폴더 삭제")
+    public ApiDataResponse<String> deleteFolder(
+        @RequestBody BookmarkDeleteReq req
+    ) {
+        dataService.deleteBookmark(req.toServiceReq(), getUserId());
+        return ApiDataResponse.of(HttpStatus.OK.value(), "폴더가 성공적으로 삭제되었습니다.", null);
     }
 
 }
