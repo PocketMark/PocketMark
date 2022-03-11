@@ -100,6 +100,9 @@ public class Item extends BaseEntity implements Persistable<String>{
     private String name;
     private BigDecimal visitCount;
 
+    private BigDecimal like; //default 0 - BigDecimal 로 해야하나... 아...! 모든아이템 좋아요 합산할때 오버플로우나겟넹..
+    private Boolean star; //default false
+
 
     /* Non-Table-Field Area */
     @ManyToOne(
@@ -154,6 +157,9 @@ public class Item extends BaseEntity implements Persistable<String>{
         this.parentId=parentId;
         this.name=name;
         this.visitCount=BigDecimal.valueOf(0L);
+
+        this.like=BigDecimal.valueOf(0L);
+        this.star=false;
     }
 
 

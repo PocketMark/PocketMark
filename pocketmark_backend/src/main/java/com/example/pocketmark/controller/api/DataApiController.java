@@ -12,6 +12,7 @@ import com.example.pocketmark.dto.main.ItemDto.BookmarkUpdateReq;
 import com.example.pocketmark.dto.main.ItemDto.FolderCreateReq;
 import com.example.pocketmark.dto.main.ItemDto.FolderDeleteReq;
 import com.example.pocketmark.dto.main.ItemDto.FolderUpdateReq;
+import com.example.pocketmark.dto.main.ItemDto.ItemSimpleUpdateReq;
 import com.example.pocketmark.security.provider.UserPrincipal;
 import com.example.pocketmark.service.DataService;
 
@@ -177,5 +178,16 @@ public class DataApiController {
         dataService.deleteBookmark(req.toServiceReq(), getUserId());
         return ApiDataResponse.of(HttpStatus.OK.value(), "폴더가 성공적으로 삭제되었습니다.", null);
     }
+
+
+    /*  Like, Star, VisitCount  */
+    @PutMapping(value="/item")
+    @ApiOperation(value="아이템(폴더,북마크) 좋아요, 즐겨찾기, 조회수 수정")
+    public ApiDataResponse<String> updateItem(
+        @RequestBody ItemSimpleUpdateReq req
+    ) {
+        dataService.updateItemOnlySocialField(req.toServiceReq(), getUserId());
+        return ApiDataResponse.of(HttpStatus.OK.value(), "폴더가 성공적으로 삭제되었습니다.", null);
+    } 
 
 }

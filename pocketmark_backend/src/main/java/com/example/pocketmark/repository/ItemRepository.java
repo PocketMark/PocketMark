@@ -31,4 +31,10 @@ public interface ItemRepository extends JpaRepository<Item, String> {
     // ItemIdOnly getLastItemId(@Param("userId") Long userId);
 
     Long getLastItemId(@Param("userId") Long userId);
+
+
+
+    /* Native Query Area */
+    
+    
 }

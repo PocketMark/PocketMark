@@ -25,6 +25,7 @@ import com.example.pocketmark.dto.main.ItemDto.BookmarkUpdateReq.BookmarkUpdateS
 import com.example.pocketmark.dto.main.ItemDto.FolderCreateReq.FolderCreateServiceReq;
 import com.example.pocketmark.dto.main.ItemDto.FolderDeleteReq.FolderDeleteServiceReq;
 import com.example.pocketmark.dto.main.ItemDto.FolderUpdateReq.FolderUpdateServiceReq;
+import com.example.pocketmark.dto.main.ItemDto.ItemSimpleUpdateReq.ItemSimpleUpdateSerivceReq;
 import com.example.pocketmark.repository.ItemRepository;
 
 import org.springframework.data.domain.Pageable;
@@ -184,6 +185,14 @@ public class DataService {
         return true;
     }
 
+
+
+    /* Like, Star, VisitCount */
+    public boolean updateItemOnlySocialField(ItemSimpleUpdateSerivceReq req, Long userId){
+        
+
+        return true;
+    }
 
 
 }

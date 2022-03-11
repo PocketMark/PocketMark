@@ -292,6 +292,39 @@ public class ItemDto {
     }
     
 
+    /*------------------------------*/
+    /* Like, Star, VisitCount */
+    /* 이 친구들만 수정하는데 편하다고 해서 기존 api에 필드 추가해서 넣으면 QueryRepo에서 굳이 안거쳐도 되는 if문을 거침*/
+    /* Request 덩치차이 -> 네트워크 비용에 얼마나 영향을 줄까? (select 문 줄이는거랑 비슷하지 않을까..) */
+    /* 이 친구들은 분리하여 api 만드는게 나을 것 같음 (다른개발자분들이랑 토론해보기) */
+    
+    @Getter @Builder
+    @AllArgsConstructor @NoArgsConstructor
+    public static class ItemSimpleUpdateReq{
+        private BigDecimal like;
+        private Boolean star;
+        private BigDecimal visitCount;
+
+
+        public ItemSimpleUpdateSerivceReq toServiceReq(){
+            return ItemSimpleUpdateSerivceReq.builder()
+                    .like(this.like)
+                    .star(this.star)
+                    .visitCount(this.visitCount)
+                    .build();
+        }
+
+        @Getter @Builder
+        @AllArgsConstructor @NoArgsConstructor
+        public static class ItemSimpleUpdateSerivceReq{
+            private BigDecimal like;
+            private Boolean star;
+            private BigDecimal visitCount;
+        }
+    }
+
+
+
     
 
 
