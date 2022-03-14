@@ -1,4 +1,4 @@
-package com.example.pocketmark.domain;
+package com.example.pocketmark.domain.auth;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;

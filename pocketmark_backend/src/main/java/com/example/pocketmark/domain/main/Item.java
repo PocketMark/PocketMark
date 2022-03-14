@@ -24,10 +24,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.example.pocketmark.domain.User;
 import com.example.pocketmark.domain.base.BaseEntity;
 import com.example.pocketmark.domain.main.Item.ItemPK;
 import com.example.pocketmark.domain.main.embeddable.Tags;
+import com.example.pocketmark.domain.user.User;
 import com.example.pocketmark.dto.main.TagDto.TagRes;
 import com.example.pocketmark.dto.main.TagDto.TagResImpl;
 import com.example.pocketmark.service.TagService;

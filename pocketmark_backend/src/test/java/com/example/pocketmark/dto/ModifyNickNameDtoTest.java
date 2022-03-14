@@ -6,20 +6,23 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.BDDAssertions.then;
 import static org.junit.jupiter.api.Assertions.*;
 
+import com.example.pocketmark.dto.user.UserDto.ChangeNickNameDto;
+import com.example.pocketmark.dto.user.UserDto.ChangeNickNameRequest;
+
 class ModifyNickNameDtoTest {
 
     @DisplayName("ModifyNickName : Request convert dto")
     @Test
     public void fromChangeNickNameRequest(){
         //Given
-        ModifyNickNameDto.ChangeNickNameRequest request =
-                ModifyNickNameDto.ChangeNickNameRequest.builder()
+        ChangeNickNameRequest request =
+                ChangeNickNameRequest.builder()
                         .newNickName("JyuKa")
                         .build();
 
         //When
-        ModifyNickNameDto.ChangeNickNameDto dto =
-                ModifyNickNameDto.ChangeNickNameDto.fromChangeNickNameRequest(request);
+        ChangeNickNameDto dto =
+                ChangeNickNameDto.fromChangeNickNameRequest(request);
 
         //Then
         then(dto.getNewNickName()).isEqualTo(request.getNewNickName());

@@ -1,4 +1,4 @@
-package com.example.pocketmark.domain;
+package com.example.pocketmark.domain.auth;
 
 import com.example.pocketmark.domain.base.BaseTimeEntityWithId;
 import lombok.AllArgsConstructor;

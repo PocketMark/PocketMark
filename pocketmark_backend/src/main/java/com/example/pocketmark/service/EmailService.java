@@ -1,9 +1,9 @@
 package com.example.pocketmark.service;
 
 import com.example.pocketmark.constant.ErrorCode;
-import com.example.pocketmark.domain.EmailAuthenticationCode;
-import com.example.pocketmark.dto.AuthenticationEmail;
-import com.example.pocketmark.dto.SendAuthenticationEmail.SendAuthenticationEmailDto;
+import com.example.pocketmark.domain.auth.EmailAuthenticationCode;
+import com.example.pocketmark.dto.user.AuthDto.AuthenticationEmailDto;
+import com.example.pocketmark.dto.user.AuthDto.SendAuthenticationEmailDto;
 import com.example.pocketmark.exception.GeneralException;
 import com.example.pocketmark.repository.EmailAuthenticationCodeRepository;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -71,7 +71,7 @@ public class EmailService {
 
 
     @Transactional
-    public boolean authenticateEmail(AuthenticationEmail.AuthenticationEmailDto dto) {
+    public boolean authenticateEmail(AuthenticationEmailDto dto) {
 
         EmailAuthenticationCode code = emailAuthenticationCodeRepository
                 .findFirstByEmailOrderByCreatedAtDesc(dto.getEmail());

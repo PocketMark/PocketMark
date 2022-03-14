@@ -1,8 +1,8 @@
 package com.example.pocketmark.security.filter;
 
 import com.example.pocketmark.constant.ErrorCode;
-import com.example.pocketmark.domain.User;
-import com.example.pocketmark.dto.LoginDto;
+import com.example.pocketmark.domain.user.User;
+import com.example.pocketmark.dto.user.UserDto.LoginReq;
 import com.example.pocketmark.exception.GeneralException;
 import com.example.pocketmark.security.provider.JwtUtil;
 import com.example.pocketmark.service.UserService;
@@ -41,7 +41,7 @@ public class JwtLoginFilter extends UsernamePasswordAuthenticationFilter {
             HttpServletRequest request,
             HttpServletResponse response) throws AuthenticationException
     {
-        LoginDto.LoginReq loginReq = objectMapper.readValue(request.getInputStream(), LoginDto.LoginReq.class);
+        LoginReq loginReq = objectMapper.readValue(request.getInputStream(), LoginReq.class);
         if(loginReq.getRefreshToken() == null) {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     loginReq.getEmail(), loginReq.getPw(), null

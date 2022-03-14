@@ -1,9 +1,16 @@
 package com.example.pocketmark.service;
 
 import com.example.pocketmark.constant.ErrorCode;
-import com.example.pocketmark.domain.Authority;
-import com.example.pocketmark.domain.User;
+import com.example.pocketmark.domain.auth.Authority;
+import com.example.pocketmark.domain.user.User;
 import com.example.pocketmark.dto.*;
+import com.example.pocketmark.dto.user.AuthDto.EmailCheckDto;
+import com.example.pocketmark.dto.user.UserDto.ChangeNickNameDto;
+import com.example.pocketmark.dto.user.UserDto.ChangePwDto;
+import com.example.pocketmark.dto.user.UserDto.LeaveUserDto;
+import com.example.pocketmark.dto.user.UserDto.LoginReq;
+import com.example.pocketmark.dto.user.UserDto.NickNameCheckDto;
+import com.example.pocketmark.dto.user.UserDto.SignUpDto;
 import com.example.pocketmark.exception.GeneralException;
 import com.example.pocketmark.repository.UserRepository;
 
@@ -29,7 +36,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Transactional
-    public User create(SignUpUserDto.SignUpDto signUpDto){
+    public User create(SignUpDto signUpDto){
 
         User user = userRepository.save(new User(
                 signUpDto.getEmail(),
@@ -42,7 +49,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void modifyPassword(ModifyPwDto.ChangePwDto changePwDto, Long userId) {
+    public void modifyPassword(ChangePwDto changePwDto, Long userId) {
         User user = selectUserByUserId(userId);
 
         if(!user.isMatch(encryptor, changePwDto.getNowPw())){
@@ -65,7 +72,7 @@ public class UserService implements UserDetailsService {
 
 
     @Transactional
-    public User selectUserByLoginReq(LoginDto.LoginReq req){
+    public User selectUserByLoginReq(LoginReq req){
         Optional<User> savedUser = userRepository.findByEmail(req.getEmail());
 
         if(savedUser.isPresent()){
@@ -87,7 +94,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void modifyNickName(ModifyNickNameDto.ChangeNickNameDto changeNickNameDto, Long userId) {
+    public void modifyNickName(ChangeNickNameDto changeNickNameDto, Long userId) {
         User user = selectUserByUserId(userId);
 
         if(userRepository.existsByNickName(changeNickNameDto.getNewNickName())){
@@ -98,19 +105,19 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public void deleteUser(LeaveUser.LeaveUserDto leaveUserDto, Long userId) {
+    public void deleteUser(LeaveUserDto leaveUserDto, Long userId) {
         User user = selectUserByUserId(userId);
         user.deleteUser(leaveUserDto.isLeave());
     }
 
 
     @Transactional
-    public boolean checkAvailableEmail(EmailCheck.EmailCheckDto emailCheckDto){
+    public boolean checkAvailableEmail(EmailCheckDto emailCheckDto){
         return !userRepository.existsByEmail(emailCheckDto.getEmail());
     }
 
     @Transactional
-    public boolean checkAvailableNickName(NickNameCheck.NickNameCheckDto nickNameCheckDto){
+    public boolean checkAvailableNickName(NickNameCheckDto nickNameCheckDto){
         return !userRepository.existsByNickName(nickNameCheckDto.getNickName());
     }
 

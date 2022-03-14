@@ -14,8 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.example.pocketmark.domain.User;
 import com.example.pocketmark.domain.base.BaseEntity;
+import com.example.pocketmark.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.hibernate.annotations.CollectionId;

@@ -1,8 +1,10 @@
 package com.example.pocketmark.service;
 
 import com.example.pocketmark.constant.ErrorCode;
-import com.example.pocketmark.domain.RefreshToken;
-import com.example.pocketmark.domain.User;
+import com.example.pocketmark.domain.auth.RefreshToken;
+import com.example.pocketmark.domain.user.User;
+import com.example.pocketmark.dto.user.AuthDto.RefreshTokenDto;
+import com.example.pocketmark.dto.user.AuthDto.RefreshTokenRes;
 import com.example.pocketmark.exception.GeneralException;
 import com.example.pocketmark.security.provider.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -11,7 +13,6 @@ import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.example.pocketmark.dto.RefreshToken.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;

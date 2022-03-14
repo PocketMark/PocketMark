@@ -2,7 +2,7 @@ package com.example.pocketmark.security.filter;
 
 
 import com.example.pocketmark.constant.ErrorCode;
-import com.example.pocketmark.domain.User;
+import com.example.pocketmark.domain.user.User;
 import com.example.pocketmark.exception.GeneralException;
 import com.example.pocketmark.security.provider.JwtAuthenticationToken;
 import com.example.pocketmark.security.provider.JwtUtil;

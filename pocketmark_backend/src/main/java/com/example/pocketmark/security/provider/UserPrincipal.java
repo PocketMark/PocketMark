@@ -1,6 +1,6 @@
 package com.example.pocketmark.security.provider;
 
-import com.example.pocketmark.domain.User;
+import com.example.pocketmark.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.springframework.security.core.GrantedAuthority;

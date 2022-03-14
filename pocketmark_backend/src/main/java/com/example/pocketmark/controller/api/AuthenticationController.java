@@ -1,10 +1,17 @@
 package com.example.pocketmark.controller.api;
 
-import com.example.pocketmark.dto.AuthenticationEmail;
-import com.example.pocketmark.dto.LoginDto;
-import com.example.pocketmark.dto.RefreshToken;
-import com.example.pocketmark.dto.SendAuthenticationEmail;
+import com.example.pocketmark.domain.auth.RefreshToken;
 import com.example.pocketmark.dto.common.ApiDataResponse;
+import com.example.pocketmark.dto.user.AuthDto.AuthenticationEmailDto;
+import com.example.pocketmark.dto.user.AuthDto.AuthenticationEmailReq;
+import com.example.pocketmark.dto.user.AuthDto.AuthenticationEmailRes;
+import com.example.pocketmark.dto.user.AuthDto.RefreshTokenDto;
+import com.example.pocketmark.dto.user.AuthDto.RefreshTokenReq;
+import com.example.pocketmark.dto.user.AuthDto.RefreshTokenRes;
+import com.example.pocketmark.dto.user.AuthDto.SendAuthenticationEmailDto;
+import com.example.pocketmark.dto.user.AuthDto.SendAuthenticationEmailReq;
+import com.example.pocketmark.dto.user.UserDto.LoginReq;
+import com.example.pocketmark.dto.user.UserDto.LoginRes;
 import com.example.pocketmark.security.provider.JwtUtil;
 import com.example.pocketmark.security.provider.TokenBox;
 import com.example.pocketmark.service.AuthenticationService;
@@ -12,7 +19,6 @@ import com.example.pocketmark.service.DataService;
 import com.example.pocketmark.service.EmailService;
 import com.example.pocketmark.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
-import static com.example.pocketmark.dto.SendAuthenticationEmail.SendAuthenticationEmailDto.fromSendAuthenticationEmailReq;
 
 import org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,12 +40,12 @@ public class AuthenticationController {
     private final EmailService emailService;
 
     @PostMapping("/login")
-    public ApiDataResponse<LoginDto.LoginRes> login(
-            @RequestBody LoginDto.LoginReq req
+    public ApiDataResponse<LoginRes> login(
+            @RequestBody LoginReq req
     ){
         TokenBox tokenBox = authenticationService.authenticate(req);
         
-        return ApiDataResponse.of(LoginDto.LoginRes.builder()
+        return ApiDataResponse.of(LoginRes.builder()
                 .tokenBox(tokenBox)
                 .itemId(dataService.getLastItemId(JwtUtil.getUserId(tokenBox.getAccessToken())))
                 .build());
@@ -47,11 +53,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh-token")
-    public ApiDataResponse<RefreshToken.RefreshTokenRes> refreshJwtToken(
-            @RequestBody RefreshToken.RefreshTokenReq req
+    public ApiDataResponse<RefreshTokenRes> refreshJwtToken(
+            @RequestBody RefreshTokenReq req
     ){
-        RefreshToken.RefreshTokenRes res = refreshTokenService.refreshAccessToken(
-                RefreshToken.RefreshTokenDto.fromRefreshTokenReq(req)
+        RefreshTokenRes res = refreshTokenService.refreshAccessToken(
+                RefreshTokenDto.fromRefreshTokenReq(req)
         );
 
         return ApiDataResponse.of(res);
@@ -60,26 +66,26 @@ public class AuthenticationController {
 
     @PostMapping("/send-authentication-email")
     public ApiDataResponse<ApiDataResponse.GeneralResponse> sendAuthenticationEmail(
-            @RequestBody SendAuthenticationEmail.SendAuthenticationEmailReq req
+            @RequestBody SendAuthenticationEmailReq req
     ){
 
-        emailService.sendSignUpAuthenticationMail(fromSendAuthenticationEmailReq(req));
+        emailService.sendSignUpAuthenticationMail(SendAuthenticationEmailDto.fromSendAuthenticationEmailReq(req));
         return ApiDataResponse.success();
     }
 
 
     @PostMapping("/authentication-email")
-    public ApiDataResponse<AuthenticationEmail.AuthenticationEmailRes> authenticationEmail(
-            @RequestBody AuthenticationEmail.AuthenticationEmailReq req
+    public ApiDataResponse<AuthenticationEmailRes> authenticationEmail(
+            @RequestBody AuthenticationEmailReq req
     ){
 
         boolean authenticationResult = emailService.authenticateEmail(
-                AuthenticationEmail.AuthenticationEmailDto
+                        AuthenticationEmailDto
                         .fromSendAuthenticationEmailReq(req)
         );
 
         return ApiDataResponse.of(
-                AuthenticationEmail.AuthenticationEmailRes
+                        AuthenticationEmailRes
                         .builder()
                         .success(authenticationResult)
                         .build()

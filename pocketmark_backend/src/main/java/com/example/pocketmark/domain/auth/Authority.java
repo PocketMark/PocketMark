@@ -1,4 +1,4 @@
-package com.example.pocketmark.domain;
+package com.example.pocketmark.domain.auth;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

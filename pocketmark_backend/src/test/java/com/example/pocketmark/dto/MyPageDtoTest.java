@@ -1,6 +1,8 @@
 package com.example.pocketmark.dto;
 
-import com.example.pocketmark.domain.User;
+import com.example.pocketmark.domain.user.User;
+import com.example.pocketmark.dto.user.UserDto.MyPageDto;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

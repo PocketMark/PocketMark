@@ -1,6 +1,5 @@
 package com.example.pocketmark.security.provider;
 
-import com.example.pocketmark.domain.User;
 import io.jsonwebtoken.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,6 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.example.pocketmark.domain.user.User;
 
 @Component
 public class JwtUtil {

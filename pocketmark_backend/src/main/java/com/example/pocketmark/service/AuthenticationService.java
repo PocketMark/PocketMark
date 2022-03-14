@@ -1,9 +1,9 @@
 package com.example.pocketmark.service;
 
 import com.example.pocketmark.constant.ErrorCode;
-import com.example.pocketmark.domain.RefreshToken;
-import com.example.pocketmark.domain.User;
-import com.example.pocketmark.dto.LoginDto;
+import com.example.pocketmark.domain.auth.RefreshToken;
+import com.example.pocketmark.domain.user.User;
+import com.example.pocketmark.dto.user.UserDto.LoginReq;
 import com.example.pocketmark.exception.GeneralException;
 import com.example.pocketmark.security.provider.JwtUtil;
 import com.example.pocketmark.security.provider.TokenBox;
@@ -27,7 +27,7 @@ public class AuthenticationService {
     private final JwtUtil jwtUtil;
     private final RefreshTokenService refreshTokenService;
 
-    public TokenBox authenticate(LoginDto.LoginReq req) {
+    public TokenBox authenticate(LoginReq req) {
         Authentication auth = authenticate(req.getEmail(),req.getPw());
 
         final UserDetails userDetails = (UserDetails) auth.getPrincipal();

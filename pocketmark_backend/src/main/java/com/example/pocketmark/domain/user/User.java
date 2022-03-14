@@ -1,6 +1,7 @@
-package com.example.pocketmark.domain;
+package com.example.pocketmark.domain.user;
 
 
+import com.example.pocketmark.domain.auth.Authority;
 import com.example.pocketmark.domain.base.BaseTimeEntity;
 import com.example.pocketmark.domain.base.BaseTimeEntityWithId;
 import com.example.pocketmark.util.Encryptor;

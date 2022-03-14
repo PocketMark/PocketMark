@@ -2,8 +2,25 @@ package com.example.pocketmark.controller.api;
 
 import com.example.pocketmark.dto.*;
 import com.example.pocketmark.dto.common.ApiDataResponse;
-
-
+import com.example.pocketmark.dto.user.AuthDto.EmailCheckDto;
+import com.example.pocketmark.dto.user.AuthDto.EmailCheckReq;
+import com.example.pocketmark.dto.user.AuthDto.EmailCheckRes;
+import com.example.pocketmark.dto.user.UserDto.ChangeNickNameDto;
+import com.example.pocketmark.dto.user.UserDto.ChangeNickNameRequest;
+import com.example.pocketmark.dto.user.UserDto.ChangeNickNameResponse;
+import com.example.pocketmark.dto.user.UserDto.ChangePwDto;
+import com.example.pocketmark.dto.user.UserDto.ChangePwRequest;
+import com.example.pocketmark.dto.user.UserDto.ChangePwResponse;
+import com.example.pocketmark.dto.user.UserDto.LeaveUserDto;
+import com.example.pocketmark.dto.user.UserDto.LeaveUserRequest;
+import com.example.pocketmark.dto.user.UserDto.LeaveUserResponse;
+import com.example.pocketmark.dto.user.UserDto.MyPageDto;
+import com.example.pocketmark.dto.user.UserDto.NickNameCheckDto;
+import com.example.pocketmark.dto.user.UserDto.NickNameCheckReq;
+import com.example.pocketmark.dto.user.UserDto.NickNameCheckRes;
+import com.example.pocketmark.dto.user.UserDto.SignUpDto;
+import com.example.pocketmark.dto.user.UserDto.signUpRequest;
+import com.example.pocketmark.dto.user.UserDto.signUpResponse;
 import com.example.pocketmark.security.provider.UserPrincipal;
 import com.example.pocketmark.service.LoginService;
 import com.example.pocketmark.service.UserService;
@@ -36,11 +53,11 @@ public class UserApiController {
 
 
     @PostMapping("/sign-up")
-    public ApiDataResponse<SignUpUserDto.signUpResponse> signUp(
-            @Valid @RequestBody SignUpUserDto.signUpRequest request
+    public ApiDataResponse<signUpResponse> signUp(
+            @Valid @RequestBody signUpRequest request
     ){
 
-        loginService.signUp(SignUpUserDto.SignUpDto.fromSignUpRequest(request));
+        loginService.signUp(SignUpDto.fromSignUpRequest(request));
         return ApiDataResponse.empty();
 
     }
@@ -56,56 +73,56 @@ public class UserApiController {
     }
 
     @PutMapping("/changePassword")
-    public ApiDataResponse<ModifyPwDto.ChangePwResponse> changePassword(
-            @Valid @RequestBody ModifyPwDto.ChangePwRequest request
+    public ApiDataResponse<ChangePwResponse> changePassword(
+            @Valid @RequestBody ChangePwRequest request
     ){
 
-        userService.modifyPassword(ModifyPwDto.ChangePwDto.fromChangePwRequest(request),getUserId());
+        userService.modifyPassword(ChangePwDto.fromChangePwRequest(request),getUserId());
         return ApiDataResponse.empty();
     }
 
 
     @PutMapping("/changeNickName")
-    public ApiDataResponse<ModifyNickNameDto.ChangeNickNameResponse> changeNickName(
-            @Valid @RequestBody ModifyNickNameDto.ChangeNickNameRequest request
+    public ApiDataResponse<ChangeNickNameResponse> changeNickName(
+            @Valid @RequestBody ChangeNickNameRequest request
     ){
-        userService.modifyNickName(ModifyNickNameDto.ChangeNickNameDto.fromChangeNickNameRequest(request),getUserId());
+        userService.modifyNickName(ChangeNickNameDto.fromChangeNickNameRequest(request),getUserId());
         return ApiDataResponse.empty();
     }
 
     @PutMapping("/userLeave")
-    public ApiDataResponse<LeaveUser.LeaveUserResponse> leaveUser(
-            @Valid @RequestBody LeaveUser.LeaveUserRequest request
+    public ApiDataResponse<LeaveUserResponse> leaveUser(
+            @Valid @RequestBody LeaveUserRequest request
     ){
-        userService.deleteUser(LeaveUser.LeaveUserDto.fromLeaveUserRequest(request),getUserId());
+        userService.deleteUser(LeaveUserDto.fromLeaveUserRequest(request),getUserId());
         return ApiDataResponse.empty();
     }
 
     @PostMapping("/email-check")
-    public ApiDataResponse<EmailCheck.EmailCheckRes> emailCheck(
-            @Valid @RequestBody EmailCheck.EmailCheckReq request
+    public ApiDataResponse<EmailCheckRes> emailCheck(
+            @Valid @RequestBody EmailCheckReq request
     ){
        boolean result = userService
-               .checkAvailableEmail(EmailCheck.EmailCheckDto.fromEmailCheckRequest(request));
+               .checkAvailableEmail(EmailCheckDto.fromEmailCheckRequest(request));
 
 
         return ApiDataResponse.of(
-                EmailCheck.EmailCheckRes
+                        EmailCheckRes
                         .builder()
                         .available(result)
                         .build());
     }
 
     @PostMapping("/alias-check")
-    public ApiDataResponse<NickNameCheck.NickNameCheckRes> nickNameCheck(
-            @Valid @RequestBody NickNameCheck.NickNameCheckReq request
+    public ApiDataResponse<NickNameCheckRes> nickNameCheck(
+            @Valid @RequestBody NickNameCheckReq request
     ){
         boolean result = userService
-                .checkAvailableNickName(NickNameCheck.NickNameCheckDto.fromNickNameCheckRequest(request));
+                .checkAvailableNickName(NickNameCheckDto.fromNickNameCheckRequest(request));
 
 
         return ApiDataResponse.of(
-                NickNameCheck.NickNameCheckRes
+                        NickNameCheckRes
                         .builder()
                         .available(result)
                         .build()
